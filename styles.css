@@ -38,10 +38,10 @@ body{
     background-color: #919090;
     cursor: pointer;
 }
-[data-action]{
+[data-action], [data-equals]{
     background-color: #e8a11e !important;
 }
-[data-action]:hover{
+[data-action]:hover, [data-equals]:hover{
     background-color: #c98c1a !important;
     cursor: pointer;
 }
