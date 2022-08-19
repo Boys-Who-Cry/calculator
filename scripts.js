@@ -47,19 +47,29 @@ const operate = (prev, current, op) => {
 
 
 //Numbers
+const checkForRepeat = () => {
+}
 numberButton.forEach(button => {
     button.addEventListener("click", (event) => {
-        //Gets second number
+        //Second number
         if(operator && previousOperand === ""){
             previousOperand = currentOperand;
             currentOperand = "";
         }
+
         //First Number
         currentOperand += event.target.textContent;
 
+        //Can't have more than one period
+        for(let i = 0; i < currentOperand.length; i++){
+            if(currentOperand.indexOf(".") !== currentOperand.lastIndexOf(".")){
+                currentOperand = currentOperand.slice(0,-1);
+            }
+        }
         updateDisplay(currentOperand);
-
-        console.log(`Previous: ${previousOperand} Current: ${currentOperand} Operator: ${operator}`);
+        
+        //Can't have leading zeros
+        if(currentOperand[0] === "0"){clearCalculator();}
     });
 });
 
@@ -74,7 +84,8 @@ actionButton.forEach(button => {
         else if(previousOperand){
             operator = event.target.dataset.action;
         }
-        else if(!currentOperand){return;}//Forbids choosing operator unless it proceeds a number.
+        //Cant choose operator without previously choosing a number.
+        else if(!currentOperand){return;}
         operator = event.target.dataset.action;
         console.log(`Operator: ${operator}`);
     });
@@ -83,27 +94,26 @@ actionButton.forEach(button => {
 
 
 //Clear
-clear.addEventListener("click", () => {
+const clearCalculator = () => {
     previousOperand = "";
     currentOperand = "";
     operator = "";
     updateDisplay("0");
-    //console.log(`Previous: ${previousOperand} Current: ${currentOperand} Operator: ${operator}`);
+}
+clear.addEventListener("click", () => {
+    clearCalculator();
 });
 
 
 
 //Equals
-//The reasoning behind using another function to perform the functions of the equals button and calling the below getResults() function from inside of the equals button event listener is to be able to call it when chaining equations not using the equals button.
 const getResults = () => {
     let results = operate(previousOperand, currentOperand, operator);
 
     previousOperand = results;
     currentOperand = "";
     operator = "";
-    console.log(`Previous: ${previousOperand} Current: ${currentOperand} Operator: ${operator}`);
 }
 equals.addEventListener("click", () => {
-    //Storing the return value of the operate function in its own variable and then reorganizing/resetting the calculators variables as such, enables the user to use the equals button to chain different equations.
     getResults();
 });
